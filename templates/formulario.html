@@ -1,0 +1,53 @@
+<html>
+
+<body>
+    <form id="name_form">
+        <label>jogador:</label><input type="text" name="nome" /><br><br>
+
+        <label>Time:</label><input type="text" name="time" /><br><br>
+
+        <select id="myCombo">
+            <option value="opcao1" selected>Posições_jogadores</option>
+            <option value="opcao2">lateral direita</option>
+            <option value="opcao3">defesa</option>
+            <option value="opcao4">Meia de campo</option>
+            <option value="opcao5">atacante</option>
+            <option value="opcao6">lateral esquerda</option>
+        </select>
+
+        <input type="submit" value="submit" />
+    </form>
+    <input type="text" id="resp" name="resp" />
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript">
+        $('#name_form').submit(function (e) {
+            e.preventDefault();
+
+            var nome = {
+                nome: $('[name=nome]').val(),
+                time: $('[name=time]').val(),
+                posicao: $('#myCombo option:selected').text()
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/exemplo',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(nome),
+                success: function (callback) {
+                    console.log(callback);
+                    $('#resp').val(callback.nome + ':' + ' ' + callback.time + ':' + ' ' + callback.posicao)
+                    $('[name=nome]').val('');
+                    $('[name=time]').val('');
+                    $('#myCombo').val(1);
+                },
+                error: function () {
+                    $(this).html("error!");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
